@@ -1,0 +1,4 @@
+C:\Users\batuhan\Desktop\Projects\İmage_Processing_GUI\Image_Processing_GUI\Image_Processing_GUI\Debug\Image_Processing_GUI.vcxprojAssemblyReference.cache
+C:\Users\batuhan\Desktop\Projects\İmage_Processing_GUI\Image_Processing_GUI\Image_Processing_GUI\Debug\ImageProcessingGUI.IP_Form.resources
+C:\Users\batuhan\Desktop\Projects\İmage_Processing_GUI\Image_Processing_GUI\Image_Processing_GUI\Debug\Image_Processing_GUI.vcxproj.GenerateResource.cache
+C:\Users\batuhan\Desktop\Projects\İmage_Processing_GUI\Image_Processing_GUI\Image_Processing_GUI\Debug\ImageProcessingGUI.SmoothingForm.resources
