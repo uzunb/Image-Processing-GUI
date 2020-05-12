@@ -126,7 +126,6 @@
     <ClCompile Include="IP_Form.cpp" />
     <ClCompile Include="IP_tools.cpp" />
     <ClCompile Include="ReadBMP.cpp" />
-    <ClCompile Include="SmoothingForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawShape.h" />
@@ -135,16 +134,10 @@
     </ClInclude>
     <ClInclude Include="IP_tools.h" />
     <ClInclude Include="ReadBMP.h" />
-    <ClInclude Include="SmoothingForm.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="IP_Form.resx">
       <DependentUpon>IP_Form.h</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SmoothingForm.resx">
-      <DependentUpon>SmoothingForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

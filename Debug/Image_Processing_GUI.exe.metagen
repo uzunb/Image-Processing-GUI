@@ -1,5 +1,4 @@
   ImageProcessingGUI.IP_Form.resources - Embedded, ContainedInManifestFile, 
-  ImageProcessingGUI.SmoothingForm.resources - Embedded, ContainedInManifestFile, 
 ImageRuntimeVersion: v4.0.30319
 Assembly Image_Processing_GUI, Version=0.0.*, Culture=Invariant Language (Invariant Country): 
 	hash=SHA1, flags=PublicKey
@@ -19,16 +18,12 @@ Assembly System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=
 	hash=None, flags=None
 Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
-Class ImageProcessingGUI.SmoothingForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-  :System.Windows.Forms.Form
-    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    System.Windows.Forms.ComboBox comboBox1 : Public
 Class ImageProcessingGUI.IP_Form: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.Windows.Forms.Label label4 : Public
+    System.Windows.Forms.ComboBox comboBox1 : Public
     Byte* imageBuffer : Public
     Byte* grayscaleImageBuffer : Public
     Int32 Height : Public
@@ -37,6 +32,3 @@ Class ImageProcessingGUI.IP_Form: AutoLayout, AnsiClass, Class, Public, BeforeFi
     System.Drawing.Bitmap grayscaleImage : Public
     System.Drawing.Bitmap binaryImage : Public
     System.Drawing.Bitmap smoothImage : Public
-    ImageProcessingGUI.SmoothingForm SetSmoothForm : Public
-    System.String imageFileName : Public
-    System.String strElSize : Public
