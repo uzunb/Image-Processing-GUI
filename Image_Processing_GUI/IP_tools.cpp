@@ -1,6 +1,8 @@
 #include "IP_tools.h"
 #include <Windows.h>
 #include <string.h>
+#include <thread>
+
 
 using namespace System::Drawing;
 
@@ -112,10 +114,22 @@ double CalculateVariance(double mean, double* histogram)
 	return variance;
 }
 
-Bitmap^ meanFilter(Bitmap^ Image, int templateSize)
+
+double* thresholding(double thresholdValue, double* histogram)
+{
+	for (int i = 0; i < 256; i++)
+		histogram[i] = histogram[i] < thresholdValue ? 255 : 0;
+
+	return histogram;
+}
+
+
+
+
+Bitmap^ meanFiltering(Bitmap^ Image, int templateSize)
 {
 	Bitmap^ outputImage = gcnew Bitmap(Image->Width, Image->Height);
-	int x, y, i, j, totalR, totalG, totalB, avgR, avgG, avgB;
+	int totalR, totalG, totalB, avgR, avgG, avgB;
 
 	Color pxl;
 	for (int x = (templateSize - 1) / 2; x < Image->Width - (templateSize - 1) / 2; x++) {
@@ -145,13 +159,167 @@ Bitmap^ meanFilter(Bitmap^ Image, int templateSize)
 	return outputImage;
 }
 
-double* thresholding(double thresholdValue, double* histogram)
-{
-	for (int i = 0; i < 256; i++)
-		histogram[i] = histogram[i] < thresholdValue ? 255 : 0;
 
-	return histogram;
+
+Bitmap^ medianFiltering(Bitmap^ Image, int templateSize)
+{
+	Bitmap^ outputImage = gcnew Bitmap(Image->Width, Image->Height);
+	int strElementSize = templateSize * templateSize;
+	int *R = new int[strElementSize]();
+	int* G = new int[strElementSize]();
+	int* B = new int[strElementSize]();
+
+	Color pxl, medianPxl;
+	for (int x = (templateSize - 1) / 2; x < Image->Width - (templateSize - 1) / 2; x++) {
+		for (int y = (templateSize - 1) / 2; y < Image->Height - (templateSize - 1) / 2; y++) {
+			
+			int strlElIndex = 0;
+			for (int i = -((templateSize - 1) / 2); i <= (templateSize - 1) / 2; i++) {
+				for (int j = -((templateSize - 1) / 2); j <= (templateSize - 1) / 2; j++) {
+					pxl = Image->GetPixel(x + i, y + j);
+
+					R[strlElIndex] = pxl.R;
+					G[strlElIndex] = pxl.G;
+					B[strlElIndex] = pxl.B;
+
+					strlElIndex++;
+				}
+			}
+
+			medianPxl = findMedianPxls(R, G, B, strElementSize);
+			outputImage->SetPixel(x, y, medianPxl);
+		}
+	}
+
+	return outputImage;
+}
+
+//Tek fonksiyon yapýlabilir. MultiThreading yapmayý dene.
+Color findMedianPxls(int* R, int* G, int* B, int elementSize)
+{
+	int medianR, medianG, medianB;
+	/*std::thread (findMedianR, R, elementSize, std::ref(medianR)).detach();
+	std::thread (findMedianG, G, elementSize, std::ref(medianG)).detach();
+	std::thread (findMedianB, B, elementSize, std::ref(medianB)).detach();
+	printf("Threads was work.\n");*/
+
+	findMedianB(B, elementSize, medianB);
+	findMedianG(G, elementSize, medianG);
+	findMedianR(R, elementSize, medianR);
+
+
+	return Color::FromArgb(medianR, medianG, medianB);
+}
+
+void findMedianR(int* pxl, const int elementSize, int const& outputValue)
+{
+	int& y = const_cast<int&>(outputValue);
+	int temp = 0;
+	for (int i = 0; i < elementSize; i++) {
+		for (int j = i + 1; j < elementSize; j++) {
+			if (pxl[j] < pxl[i]) {
+				temp = pxl[i];
+				pxl[i] = pxl[j];
+				pxl[j] = temp;
+			}
+		}
+	}
+	y = pxl[(elementSize - 1) / 2];
+}
+
+void findMedianG(int* pxl, const int elementSize, int const& outputValue)
+{
+	int& y = const_cast<int&>(outputValue);
+	int temp = 0;
+	for (int i = 0; i < elementSize; i++) {
+		for (int j = i + 1; j < elementSize; j++) {
+			if (pxl[j] < pxl[i]) {
+				temp = pxl[i];
+				pxl[i] = pxl[j];
+				pxl[j] = temp;
+			}
+		}
+	}
+	y = pxl[(elementSize - 1) / 2];
+}
+
+void findMedianB(int* pxl, const int elementSize, int const& outputValue)
+{
+	int& y = const_cast<int&>(outputValue);
+	int temp = 0;
+	for (int i = 0; i < elementSize; i++) {
+		for (int j = i + 1; j < elementSize; j++) {
+			if (pxl[j] < pxl[i]) {
+				temp = pxl[i];
+				pxl[i] = pxl[j];
+				pxl[j] = temp;
+			}
+		}
+	}
+	y = pxl[(elementSize - 1) / 2];
 }
 
 
+Bitmap^ gaussianSmoothing(Bitmap^ Image, int templateSize)
+{
+	Bitmap^ outputImage = gcnew Bitmap(Image->Width, Image->Height);
+	int strElementSize = templateSize * templateSize;
+	int* gaussianMatrix = getGaussianMatrix(templateSize);
+	int gaussianMatrixSum = getGaussianMatrixSum(templateSize);
+	int totalR, totalG, totalB, avgR, avgG, avgB, index;
 
+
+	Color pxl;
+	for (int x = (templateSize - 1) / 2; x < Image->Width - (templateSize - 1) / 2; x++) {
+		for (int y = (templateSize - 1) / 2; y < Image->Height - (templateSize - 1) / 2; y++) {
+
+			totalR = 0;
+			totalG = 0;
+			totalB = 0;
+
+			index = 0;
+			for (int i = -((templateSize - 1) / 2); i <= (templateSize - 1) / 2; i++) {
+				for (int j = -((templateSize - 1) / 2); j <= (templateSize - 1) / 2; j++) {
+					pxl = Image->GetPixel(x + i, y + j);
+					
+					totalR = totalR + pxl.R * gaussianMatrix[index];
+					totalG = totalG + pxl.G * gaussianMatrix[index];
+					totalB = totalB + pxl.B * gaussianMatrix[index];
+
+					avgR = totalR / gaussianMatrixSum;
+					avgG = totalG / gaussianMatrixSum;
+					avgB = totalB / gaussianMatrixSum;
+
+					index++;
+				}
+			}
+			outputImage->SetPixel(x, y, Color::FromArgb(avgR, avgG, avgB));
+		}
+	}
+	return outputImage;
+}
+
+int* getGaussianMatrix(int templateSize)
+{
+	static int matrix_7x7[] = { 0,0,1,2,1,0,0,0,3,13,22,13,3,0,1,13,59,97,59,13,1,2,22,97,159,97,22,2,1,13,59,97,59,13,1,0,3,13,22,13,3,0,0,0,1,2,1,0,0 };
+	static int matrix_5x5[] = { 1, 4, 7, 4, 1, 4, 16, 26, 16, 4, 7, 26, 41, 26, 7, 4, 16, 26, 16, 4, 1, 4, 7, 4, 1 };
+	static int matrix_3x3[] = { 1, 2, 1, 2, 4, 2, 1, 2, 1 };
+
+	if (templateSize == 5) return matrix_5x5;
+	else if (templateSize == 3) return matrix_3x3;
+	else if (templateSize == 7) return matrix_7x7;
+	else return ERROR;
+
+}
+
+int getGaussianMatrixSum(int templateSize)
+{
+	int matrixSum_7x7 = 1003;
+	int matrixSum_5x5 = 273;
+	int matrixSum_3x3 = 16;
+
+	if (templateSize == 5) return matrixSum_5x5;
+	else if (templateSize == 3) return matrixSum_3x3;
+	else if (templateSize == 7) return matrixSum_7x7;
+	else return ERROR;
+}

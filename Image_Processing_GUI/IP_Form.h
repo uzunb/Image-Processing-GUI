@@ -57,9 +57,9 @@ namespace ImageProcessingGUI {
 	private: System::Windows::Forms::ToolStripMenuItem^ binary›mageHistogramToolStripMenuItem;
 	private: System::Windows::Forms::TrackBar^ trackBar1;
 	private: System::Windows::Forms::ToolStripMenuItem^ smootingToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ meanFilteringToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ medianFilteringToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ gaussianSmoothingToolStripMenuItem;
+
+
+
 	private: System::Windows::Forms::PictureBox^ pictureBox4;
 	public: System::Windows::Forms::Label^ label4;
 
@@ -70,6 +70,8 @@ namespace ImageProcessingGUI {
 	public: System::Windows::Forms::ComboBox^ comboBox1;
 	private:
 	private: System::Windows::Forms::Label^ label6;
+	private: System::Windows::Forms::ComboBox^ comboBox3;
+	private: System::Windows::Forms::Label^ label7;
 	public:
 
 	private:
@@ -85,9 +87,9 @@ namespace ImageProcessingGUI {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^ legend2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -102,9 +104,6 @@ namespace ImageProcessingGUI {
 			this->grayscale›mageHistogramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->binary›mageHistogramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->smootingToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->meanFilteringToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->medianFilteringToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->gaussianSmoothingToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
@@ -122,6 +121,8 @@ namespace ImageProcessingGUI {
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
+			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
@@ -222,7 +223,7 @@ namespace ImageProcessingGUI {
 					this->grayscale›mageHistogramToolStripMenuItem, this->binary›mageHistogramToolStripMenuItem
 			});
 			this->extractHistogramToolStripMenuItem->Name = L"extractHistogramToolStripMenuItem";
-			this->extractHistogramToolStripMenuItem->Size = System::Drawing::Size(208, 26);
+			this->extractHistogramToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->extractHistogramToolStripMenuItem->Text = L"Extract histogram";
 			// 
 			// original›mageHistogramToolStripMenuItem
@@ -248,32 +249,10 @@ namespace ImageProcessingGUI {
 			// 
 			// smootingToolStripMenuItem
 			// 
-			this->smootingToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
-				this->meanFilteringToolStripMenuItem,
-					this->medianFilteringToolStripMenuItem, this->gaussianSmoothingToolStripMenuItem
-			});
 			this->smootingToolStripMenuItem->Name = L"smootingToolStripMenuItem";
-			this->smootingToolStripMenuItem->Size = System::Drawing::Size(208, 26);
+			this->smootingToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->smootingToolStripMenuItem->Text = L"Smoothing";
-			// 
-			// meanFilteringToolStripMenuItem
-			// 
-			this->meanFilteringToolStripMenuItem->Name = L"meanFilteringToolStripMenuItem";
-			this->meanFilteringToolStripMenuItem->Size = System::Drawing::Size(227, 26);
-			this->meanFilteringToolStripMenuItem->Text = L"Mean Filtering";
-			this->meanFilteringToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::meanFilteringToolStripMenuItem_Click);
-			// 
-			// medianFilteringToolStripMenuItem
-			// 
-			this->medianFilteringToolStripMenuItem->Name = L"medianFilteringToolStripMenuItem";
-			this->medianFilteringToolStripMenuItem->Size = System::Drawing::Size(227, 26);
-			this->medianFilteringToolStripMenuItem->Text = L"Median Filtering";
-			// 
-			// gaussianSmoothingToolStripMenuItem
-			// 
-			this->gaussianSmoothingToolStripMenuItem->Name = L"gaussianSmoothingToolStripMenuItem";
-			this->gaussianSmoothingToolStripMenuItem->Size = System::Drawing::Size(227, 26);
-			this->gaussianSmoothingToolStripMenuItem->Text = L"Gaussian Smoothing";
+			this->smootingToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::smootingToolStripMenuItem_Click);
 			// 
 			// openFileDialog1
 			// 
@@ -343,21 +322,21 @@ namespace ImageProcessingGUI {
 			// 
 			this->chart1->BackColor = System::Drawing::Color::DarkGray;
 			this->chart1->BackImageTransparentColor = System::Drawing::Color::White;
-			chartArea2->Name = L"ChartArea1";
-			this->chart1->ChartAreas->Add(chartArea2);
-			legend2->Alignment = System::Drawing::StringAlignment::Center;
-			legend2->Docking = System::Windows::Forms::DataVisualization::Charting::Docking::Bottom;
-			legend2->Name = L"Legend1";
-			legend2->TableStyle = System::Windows::Forms::DataVisualization::Charting::LegendTableStyle::Tall;
-			this->chart1->Legends->Add(legend2);
+			chartArea1->Name = L"ChartArea1";
+			this->chart1->ChartAreas->Add(chartArea1);
+			legend1->Alignment = System::Drawing::StringAlignment::Center;
+			legend1->Docking = System::Windows::Forms::DataVisualization::Charting::Docking::Bottom;
+			legend1->Name = L"Legend1";
+			legend1->TableStyle = System::Windows::Forms::DataVisualization::Charting::LegendTableStyle::Tall;
+			this->chart1->Legends->Add(legend1);
 			this->chart1->Location = System::Drawing::Point(1018, 41);
 			this->chart1->Name = L"chart1";
 			this->chart1->Palette = System::Windows::Forms::DataVisualization::Charting::ChartColorPalette::Bright;
-			series2->ChartArea = L"ChartArea1";
-			series2->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
-			series2->Legend = L"Legend1";
-			series2->Name = L"Histogram";
-			this->chart1->Series->Add(series2);
+			series1->ChartArea = L"ChartArea1";
+			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
+			series1->Legend = L"Legend1";
+			series1->Name = L"Histogram";
+			this->chart1->Series->Add(series1);
 			this->chart1->Size = System::Drawing::Size(500, 416);
 			this->chart1->TabIndex = 7;
 			this->chart1->Text = L"chart1";
@@ -407,7 +386,7 @@ namespace ImageProcessingGUI {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(718, 557);
+			this->button1->Location = System::Drawing::Point(718, 560);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(121, 33);
 			this->button1->TabIndex = 16;
@@ -420,7 +399,7 @@ namespace ImageProcessingGUI {
 			// 
 			this->comboBox2->FormattingEnabled = true;
 			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"3", L"5", L"7" });
-			this->comboBox2->Location = System::Drawing::Point(718, 505);
+			this->comboBox2->Location = System::Drawing::Point(718, 507);
 			this->comboBox2->Name = L"comboBox2";
 			this->comboBox2->Size = System::Drawing::Size(121, 33);
 			this->comboBox2->TabIndex = 15;
@@ -431,7 +410,7 @@ namespace ImageProcessingGUI {
 			this->label5->AutoSize = true;
 			this->label5->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(162)));
-			this->label5->Location = System::Drawing::Point(550, 505);
+			this->label5->Location = System::Drawing::Point(550, 512);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(162, 28);
 			this->label5->TabIndex = 14;
@@ -452,12 +431,34 @@ namespace ImageProcessingGUI {
 			this->label6->AutoSize = true;
 			this->label6->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(162)));
-			this->label6->Location = System::Drawing::Point(550, 464);
+			this->label6->Location = System::Drawing::Point(550, 473);
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(83, 28);
 			this->label6->TabIndex = 12;
 			this->label6->Text = L"Resim : ";
 			this->label6->Visible = false;
+			// 
+			// comboBox3
+			// 
+			this->comboBox3->FormattingEnabled = true;
+			this->comboBox3->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Mean Filtering", L"Median Filtering", L"Gaussian Smoothing" });
+			this->comboBox3->Location = System::Drawing::Point(718, 429);
+			this->comboBox3->Name = L"comboBox3";
+			this->comboBox3->Size = System::Drawing::Size(121, 33);
+			this->comboBox3->TabIndex = 18;
+			this->comboBox3->Visible = false;
+			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->Font = (gcnew System::Drawing::Font(L"Segoe UI Semibold", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(162)));
+			this->label7->Location = System::Drawing::Point(550, 434);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(165, 28);
+			this->label7->TabIndex = 17;
+			this->label7->Text = L"Filtreleme T¸r¸ : ";
+			this->label7->Visible = false;
 			// 
 			// IP_Form
 			// 
@@ -466,6 +467,8 @@ namespace ImageProcessingGUI {
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(64)), static_cast<System::Int32>(static_cast<System::Byte>(64)),
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->ClientSize = System::Drawing::Size(1540, 845);
+			this->Controls->Add(this->comboBox3);
+			this->Controls->Add(this->label7);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->comboBox2);
 			this->Controls->Add(this->label5);
@@ -584,6 +587,7 @@ namespace ImageProcessingGUI {
 			delete[] imageBuffer;
 			delete[] grayscaleImageBuffer;
 			delete[] grayscaleImage;
+			this->comboBox2->Items->Clear();
 			chart1->Series->Clear();
 
 		}//CLOSE IMAGE
@@ -669,34 +673,49 @@ namespace ImageProcessingGUI {
 			richTextBox1->AppendText("\nExtract to binary image histogram.");
 		}//EXTRACT TO BINARY IMAGE HISTOGRAM
 
-		
-		//SET MEAN FILTERING
-		private: System::Void meanFilteringToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-			this->pictureBox4->Visible = FALSE;
-			this->label4->Visible = FALSE;
-
-			this->label5->Visible = TRUE;
-			this->label6->Visible = TRUE;
-			this->comboBox1->Visible = TRUE;
-			this->comboBox2->Visible = TRUE;
-			this->button1->Visible = TRUE;
-
-		}//SET MEAN FILTERING
-
-
-		//EXECUTE MEAN FILTERING
+	
+		//EXECUTE SMOOTHING
 		private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 			int strElSize = Convert::ToInt32(comboBox2->SelectedItem->ToString());
 			String^ selectedImage = comboBox1->SelectedItem->ToString();
+			String^ selectedSmoothing = comboBox3->SelectedItem->ToString();
 
-			if (selectedImage == "grayscaleImage")
-				smoothImage = meanFilter(grayscaleImage, strElSize);
-			else if (selectedImage == "smoothImage")
-				smoothImage = meanFilter(smoothImage, strElSize);
-			else if (selectedImage == "binaryImage")
-				smoothImage = meanFilter(binaryImage, strElSize);
-			else 
-			{richTextBox1->AppendText("\nWrong Input."); return;}
+			if (selectedSmoothing == "Mean Filtering") {
+				if (selectedImage == "grayscaleImage")
+					smoothImage = meanFiltering(grayscaleImage, strElSize);
+				else if (selectedImage == "smoothImage")
+					smoothImage = meanFiltering(smoothImage, strElSize);
+				else if (selectedImage == "binaryImage")
+					smoothImage = meanFiltering(binaryImage, strElSize);
+				else
+				{
+					richTextBox1->AppendText("\nWrong Input."); return;
+				}
+			}
+			else if (selectedSmoothing == "Median Filtering") {
+				if (selectedImage == "grayscaleImage")
+					smoothImage = medianFiltering(grayscaleImage, strElSize);
+				else if (selectedImage == "smoothImage")
+					smoothImage = medianFiltering(smoothImage, strElSize);
+				else if (selectedImage == "binaryImage")
+					smoothImage = medianFiltering(binaryImage, strElSize);
+				else
+				{
+					richTextBox1->AppendText("\nWrong Input."); return;
+				}
+			}
+			else if (selectedSmoothing == "Gaussian Smoothing") {
+				if (selectedImage == "grayscaleImage")
+					smoothImage = gaussianSmoothing(grayscaleImage, strElSize);
+				else if (selectedImage == "smoothImage")
+					smoothImage = gaussianSmoothing(smoothImage, strElSize);
+				else if (selectedImage == "binaryImage")
+					smoothImage = gaussianSmoothing(binaryImage, strElSize);
+				else
+				{
+					richTextBox1->AppendText("\nWrong Input."); return;
+				}
+			}
 
 			this->pictureBox4->Image = smoothImage;
 			this->pictureBox4->Visible = TRUE;
@@ -704,12 +723,29 @@ namespace ImageProcessingGUI {
 
 			this->label5->Visible = FALSE;
 			this->label6->Visible = FALSE;
+			this->label7->Visible = FALSE;
 			this->comboBox1->Visible = FALSE;
 			this->comboBox2->Visible = FALSE;
+			this->comboBox3->Visible = FALSE;
 			this->button1->Visible = FALSE;
 			richTextBox1->AppendText("\nSmoothing image.");
 			this->comboBox1->Items->Add("smoothImage");
 
-		}//EXECUTE MEAN FILTERING
+		}//EXECUTE SMOOTHING
+
+		
+		//SMOOTHING SETTINGS
+		private: System::Void smootingToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+			this->pictureBox4->Visible = FALSE;
+			this->label4->Visible = FALSE;
+
+			this->label5->Visible = TRUE;
+			this->label6->Visible = TRUE;
+			this->label7->Visible = TRUE;
+			this->comboBox1->Visible = TRUE;
+			this->comboBox2->Visible = TRUE;
+			this->comboBox3->Visible = TRUE;
+			this->button1->Visible = TRUE;
+		}//SMOOTHING SETTINGS
 };
 }
