@@ -2,8 +2,6 @@
 #include <Windows.h>
 #include <string.h>
 #include <thread>
-
-
 using namespace System::Drawing;
 
 //3 renk için ayrý mý yapýlacak.
@@ -24,10 +22,8 @@ double* extractHistogram(BYTE* Buffer, int width, int height)
 double* extractHistogram(Bitmap^ Buffer, int width, int height)
 {
 	double* histogram = new double[255]();
-	//memset(histogram, 0, sizeof(histogram));
 
 	int val;
-	//resetHistoram(histogram);
 	for (int row = 0; row < height; row++)
 		for (int col = 0; col < width; col++)
 		{
@@ -54,7 +50,7 @@ double* extractHistogram(Bitmap^ Buffer, int width, int height, double* histogra
 
 double* resetHistoram(double* histogram)
 {
-	for (int i = 0; i < 256; i++)
+	for (int i = 0; i < MAX_INTENSITY; i++)
 		histogram[i] = 0;
 	return histogram;
 }
@@ -75,52 +71,50 @@ Bitmap^ toBinaryImage(Bitmap^ binarySurface, Bitmap^ grayscaleImage, int thresho
 	return binarySurface;
 }
 
-double CalculateMean(double* histogram)
+
+double CalculateMean(double* histogram, int start, int finish)
 {
 	double sum1 = 0, sum2 = 0;
-	for (int i = 0; i < 256; i++)
+	for (int i = start; i < finish; i++)
 	{
 		sum1 += histogram[i] * i;
 		sum2 += histogram[i];
 	}
-
-	double mean = sum1 / sum2;
-	return mean;
+	return sum1 == sum2 ? 1 : sum1 / sum2;
 }
 
-double CalculateWeight(double* histogram, int width, int height)
+double CalculateWeight(double* histogram, int width, int height, int start, int finish)
 {
 	double sum1 = 0;
-	for (int i = 0; i < 256; i++)
+	for (int i = start; i < finish; i++)
 		sum1 += histogram[i];
 
-	double weight = sum1 / (width * height);
-
-	return weight;
+	return sum1 / (width * height);
 }
 
-double CalculateVariance(double mean, double* histogram)
+double CalculateVariance(double mean, double* histogram, int start, int finish)
 {
 	double sum1 = 0, sum2 = 0;
-
-	for (int i = 0; i < 256; i++)
+	for (int i = start; i < finish; i++)
 	{
 		sum1 += ((i - mean) * (i - mean)) * histogram[i];
 		sum2 += histogram[i];
 	}
-
-	double variance = sum1 / sum2;
-
-	return variance;
+	return sum1 == sum2 ? 1 : sum1 / sum2;
 }
 
 
-double* thresholding(double thresholdValue, double* histogram)
+int automaticThresholdSelection(double randomThreshold, double* histogram)
 {
-	for (int i = 0; i < 256; i++)
-		histogram[i] = histogram[i] < thresholdValue ? 255 : 0;
-
-	return histogram;
+	int leftMean = 0, rightMean = 0, optimalThresholdValue = 0 ;
+	while (optimalThresholdValue != randomThreshold)
+	{
+		optimalThresholdValue = randomThreshold;
+		leftMean = CalculateMean(histogram, 0, randomThreshold);
+		rightMean = CalculateMean(histogram, randomThreshold, MAX_INTENSITY);
+		randomThreshold = (leftMean + rightMean) / 2;
+	}
+	return optimalThresholdValue;
 }
 
 
@@ -322,4 +316,23 @@ int getGaussianMatrixSum(int templateSize)
 	else if (templateSize == 3) return matrixSum_3x3;
 	else if (templateSize == 7) return matrixSum_7x7;
 	else return ERROR;
+}
+
+
+double thresholdSelectionWithOtsu(int threshold, double* histogram, int width, int height)
+{
+	
+	double meanBackground = CalculateMean(histogram, 0, threshold);
+	double meanForeground = CalculateMean(histogram, threshold, MAX_INTENSITY);
+	
+	double weightBackground = CalculateWeight(histogram, width, height, 0, threshold);
+	double weightForeground = CalculateWeight(histogram, width, height, threshold, MAX_INTENSITY);
+
+	double varianceBackground = CalculateVariance(meanBackground, histogram, 0, threshold);
+	double varianceForeground = CalculateVariance(meanForeground, histogram, threshold, MAX_INTENSITY);
+
+	double betweenClassVariance = varianceBackground * weightBackground + varianceForeground * weightForeground;
+	//double withinClassVariance = weightBackground * weightForeground * (meanBackground - meanForeground) * (meanBackground - meanForeground);
+
+	return betweenClassVariance;
 }

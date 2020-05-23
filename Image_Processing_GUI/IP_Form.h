@@ -1,3 +1,14 @@
+
+/*
+ ****************************************
+ * Computer Vision Application
+ * Batuhan UZUN
+ * LinkedIn : uzunb
+ * GitHub	: uzunb
+ * 23.05.2020
+ ****************************************
+ */
+
 #include <Windows.h>
 #include <atlstr.h>
 
@@ -72,6 +83,7 @@ namespace ImageProcessingGUI {
 	private: System::Windows::Forms::Label^ label6;
 	private: System::Windows::Forms::ComboBox^ comboBox3;
 	private: System::Windows::Forms::Label^ label7;
+	private: System::Windows::Forms::ToolStripMenuItem^ binaryImageWýtToolStripMenuItem;
 	public:
 
 	private:
@@ -123,6 +135,7 @@ namespace ImageProcessingGUI {
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
 			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->binaryImageWýtToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
@@ -182,9 +195,9 @@ namespace ImageProcessingGUI {
 			// 
 			// conversionToolStripMenuItem
 			// 
-			this->conversionToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->conversionToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->grayscaleImageToolStripMenuItem,
-					this->binaryImageToolStripMenuItem
+					this->binaryImageToolStripMenuItem, this->binaryImageWýtToolStripMenuItem
 			});
 			this->conversionToolStripMenuItem->Name = L"conversionToolStripMenuItem";
 			this->conversionToolStripMenuItem->Size = System::Drawing::Size(96, 24);
@@ -193,7 +206,7 @@ namespace ImageProcessingGUI {
 			// grayscaleImageToolStripMenuItem
 			// 
 			this->grayscaleImageToolStripMenuItem->Name = L"grayscaleImageToolStripMenuItem";
-			this->grayscaleImageToolStripMenuItem->Size = System::Drawing::Size(201, 26);
+			this->grayscaleImageToolStripMenuItem->Size = System::Drawing::Size(245, 26);
 			this->grayscaleImageToolStripMenuItem->Text = L"Grayscale Image";
 			this->grayscaleImageToolStripMenuItem->ToolTipText = L"Convert to grayscale from original i";
 			this->grayscaleImageToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::grayscaleImageToolStripMenuItem_Click);
@@ -201,7 +214,7 @@ namespace ImageProcessingGUI {
 			// binaryImageToolStripMenuItem
 			// 
 			this->binaryImageToolStripMenuItem->Name = L"binaryImageToolStripMenuItem";
-			this->binaryImageToolStripMenuItem->Size = System::Drawing::Size(201, 26);
+			this->binaryImageToolStripMenuItem->Size = System::Drawing::Size(245, 26);
 			this->binaryImageToolStripMenuItem->Text = L"Binary Image";
 			this->binaryImageToolStripMenuItem->ToolTipText = L"Convert to binary image from grayscale image";
 			this->binaryImageToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::binaryImageToolStripMenuItem_Click);
@@ -223,7 +236,7 @@ namespace ImageProcessingGUI {
 					this->grayscaleÝmageHistogramToolStripMenuItem, this->binaryÝmageHistogramToolStripMenuItem
 			});
 			this->extractHistogramToolStripMenuItem->Name = L"extractHistogramToolStripMenuItem";
-			this->extractHistogramToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->extractHistogramToolStripMenuItem->Size = System::Drawing::Size(208, 26);
 			this->extractHistogramToolStripMenuItem->Text = L"Extract histogram";
 			// 
 			// originalÝmageHistogramToolStripMenuItem
@@ -250,7 +263,7 @@ namespace ImageProcessingGUI {
 			// smootingToolStripMenuItem
 			// 
 			this->smootingToolStripMenuItem->Name = L"smootingToolStripMenuItem";
-			this->smootingToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->smootingToolStripMenuItem->Size = System::Drawing::Size(208, 26);
 			this->smootingToolStripMenuItem->Text = L"Smoothing";
 			this->smootingToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::smootingToolStripMenuItem_Click);
 			// 
@@ -340,6 +353,7 @@ namespace ImageProcessingGUI {
 			this->chart1->Size = System::Drawing::Size(500, 416);
 			this->chart1->TabIndex = 7;
 			this->chart1->Text = L"chart1";
+			this->chart1->TextAntiAliasingQuality = System::Windows::Forms::DataVisualization::Charting::TextAntiAliasingQuality::Normal;
 			this->chart1->Visible = false;
 			// 
 			// richTextBox1
@@ -460,6 +474,13 @@ namespace ImageProcessingGUI {
 			this->label7->Text = L"Filtreleme Türü : ";
 			this->label7->Visible = false;
 			// 
+			// binaryImageWýtToolStripMenuItem
+			// 
+			this->binaryImageWýtToolStripMenuItem->Name = L"binaryImageWýtToolStripMenuItem";
+			this->binaryImageWýtToolStripMenuItem->Size = System::Drawing::Size(245, 26);
+			this->binaryImageWýtToolStripMenuItem->Text = L"Binary Image with Otsu";
+			this->binaryImageWýtToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::binaryImageWýtToolStripMenuItem_Click);
+			// 
 			// IP_Form
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(10, 25);
@@ -530,7 +551,8 @@ namespace ImageProcessingGUI {
 
 		//OPEN IMAGE
 		private: System::Void openImageToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		
+			
+			
 			//delete[] imageBuffer;
 			CString str;
 			//Open BMP image
@@ -587,9 +609,8 @@ namespace ImageProcessingGUI {
 			delete[] imageBuffer;
 			delete[] grayscaleImageBuffer;
 			delete[] grayscaleImage;
-			this->comboBox2->Items->Clear();
+			this->comboBox1->Items->Clear();
 			chart1->Series->Clear();
-
 		}//CLOSE IMAGE
 
 
@@ -602,11 +623,15 @@ namespace ImageProcessingGUI {
 
 			this->trackBar1->Visible = TRUE;
 
-			toBinaryImage(binaryImage, grayscaleImage, 135);
+			double* histogram = extractHistogram(grayscaleImage, Width, Height);
+			int optimalThreshold = automaticThresholdSelection(135, histogram);
+
+			toBinaryImage(binaryImage, grayscaleImage, optimalThreshold);
 
 			label3->Visible = TRUE;
 			this->comboBox1->Items->Add("binaryImage");
-			richTextBox1->AppendText("\nConverted to binary image with thereshold value : 135");
+			richTextBox1->AppendText("\nConverted to binary image with thereshold value : " + optimalThreshold);
+		
 	
 		}//CONVERT BINARY IMAGE
 
@@ -627,13 +652,21 @@ namespace ImageProcessingGUI {
 		private: System::Void originalImageHistogramToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 			double* histogram;
 			histogram = extractHistogram(imageBuffer, Width, Height);
-
+				
 			chart1->Series->Add("Original Image Histogram");
-			for (int i = 0; i < 256; i++)
+			for (int i = 0; i < MAX_INTENSITY; i++)
 				chart1->Series["Original Image Histogram"]->Points->AddXY(i, histogram[i]);
 			chart1->Visible = TRUE;
 
+			/*double mean = CalculateMean(histogram);
+			double weight = CalculateWeight(histogram, Width, Height);
+			double variance = CalculateVariance(mean, histogram);*/
+
+			richTextBox1->AppendText("\n<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>");
 			richTextBox1->AppendText("\nExtract to original image histogram.");
+			//richTextBox1->AppendText("\nMean : " + mean + "\nWeight : " + weight + "\nVariance : " + variance);
+			richTextBox1->AppendText("\n<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>");
+
 		}//EXTRACT TO ORIGINAL IMAGE HISTOGRAM
 
 
@@ -644,17 +677,24 @@ namespace ImageProcessingGUI {
 			histogram = extractHistogram(grayscaleImageBuffer, Width, Height);
 
 			chart1->Series->Add("Grayscale Histogram");
-			for (int i = 0; i < 256; i++)
+			for (int i = 0; i < MAX_INTENSITY; i++)
 				chart1->Series["Grayscale Histogram"]->Points->AddXY(i, histogram[i]);
 			chart1->Visible = TRUE;
 
+			/*double mean = CalculateMean(histogram);
+			double weight = CalculateWeight(histogram, Width, Height);
+			double variance = CalculateVariance(mean, histogram);*/
+			richTextBox1->AppendText("\n<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>");
 			richTextBox1->AppendText("\nExtract to grayscale image histogram.");
+			//richTextBox1->AppendText("\nMean : " + mean + "\nWeight : " + weight + "\nVariance : " + variance);
+			richTextBox1->AppendText("\n<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>");
+
 		}//EXTRACT TO GRAYSCALE IMAGE HISTOGRAM
 
 		
 		//EXTRACT TO BINARY IMAGE HISTOGRAM
 		private: System::Void binaryImageHistogramToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-			double* histogram = new double[255]();
+			double* histogram = new double[MAX_INTENSITY]();
 			histogram = extractHistogram(binaryImage, Width, Height, histogram);
 
 			try {
@@ -666,11 +706,18 @@ namespace ImageProcessingGUI {
 
 			}
 			
-			for (int i = 0; i < 256; i++)
+			for (int i = 0; i < MAX_INTENSITY; i++)
 				chart1->Series["Binary Histogram"]->Points->AddXY(i, histogram[i]);
 			chart1->Visible = TRUE;
 
+			/*double mean = CalculateMean(histogram);
+			double weight = CalculateWeight(histogram, Width, Height);
+			double variance = CalculateVariance(mean, histogram);*/
+
+			richTextBox1->AppendText("\n<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>");
 			richTextBox1->AppendText("\nExtract to binary image histogram.");
+			//richTextBox1->AppendText("\nMean : " + mean + "\nWeight : " + weight + "\nVariance : " + variance);
+			richTextBox1->AppendText("\n<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>");
 		}//EXTRACT TO BINARY IMAGE HISTOGRAM
 
 	
@@ -747,5 +794,34 @@ namespace ImageProcessingGUI {
 			this->comboBox3->Visible = TRUE;
 			this->button1->Visible = TRUE;
 		}//SMOOTHING SETTINGS
+
+		//OTSU ALGORITHM
+		private: System::Void binaryImageWýtToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+
+			double betweenClassVariance, minimizingBCV;
+			int optimalThreshold;
+			binaryImage = gcnew Bitmap(Width, Height);
+			pictureBox3->Image = binaryImage;
+
+			double* histogram = extractHistogram(grayscaleImage, Width, Height);
+
+			minimizingBCV = thresholdSelectionWithOtsu(1, histogram, Width, Height);
+			for (int T = 2; T < MAX_INTENSITY; T++)
+			{
+				betweenClassVariance = thresholdSelectionWithOtsu(T, histogram, Width, Height);
+				if (betweenClassVariance < minimizingBCV) {
+					minimizingBCV = betweenClassVariance;
+					optimalThreshold = T;
+				}
+			}
+
+			toBinaryImage(binaryImage, grayscaleImage, optimalThreshold);
+
+			this->trackBar1->Visible = TRUE;
+			label3->Visible = TRUE;
+			this->comboBox1->Items->Add("binaryImage");
+			richTextBox1->AppendText("\nConverted to binary image with thereshold value : " + optimalThreshold);
+
+		}//OTSU ALGORITHM
 };
 }
