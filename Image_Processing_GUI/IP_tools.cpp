@@ -319,6 +319,7 @@ int getGaussianMatrixSum(int templateSize)
 }
 
 
+//hýzlandýrabilrisin.
 double thresholdSelectionWithOtsu(int threshold, double* histogram, int width, int height)
 {
 	
@@ -334,5 +335,50 @@ double thresholdSelectionWithOtsu(int threshold, double* histogram, int width, i
 	double betweenClassVariance = varianceBackground * weightBackground + varianceForeground * weightForeground;
 	//double withinClassVariance = weightBackground * weightForeground * (meanBackground - meanForeground) * (meanBackground - meanForeground);
 
+	
 	return betweenClassVariance;
+}
+
+
+Bitmap^ K_MeansClustring(Bitmap^ grayscaleImage, double *histogram, int width, int height)
+{
+	Bitmap^ outImage = grayscaleImage;
+
+	int K1_Class[MAX_INTENSITY] = {}, K1 = histogram[85], _K1, K1_index = 0, K1_totalWeight = 0, K1_totalHist = 0; //Black : 0
+	int K2_Class[MAX_INTENSITY] = {}, K2 = histogram[170], _K2, K2_index = 0, K2_totalWeight = 0, K2_totalHist = 0; //White : 255
+
+	while ((K1 != _K1) & (K2 != _K2))
+	{
+		for (int index = 0; index < MAX_INTENSITY; index++)
+		{
+			if (abs(K1 - histogram[index]) >= abs(K2 - histogram[index]))
+			{
+				K1_Class[index] = histogram[index];
+				K1_totalWeight += histogram[index] * index;
+				K1_totalHist += histogram[index];
+			}
+			else
+			{
+				K2_Class[index] = histogram[index];
+				K2_totalWeight += histogram[index] * index;
+				K2_totalHist += histogram[index];
+			}
+		}
+		_K1 = K1_totalWeight / K1_totalHist;
+		_K2 = K2_totalWeight / K2_totalHist;
+
+		K1 = _K1;
+		K2 = _K2;
+	}
+
+	for (int row = 0; row < height; row++)
+		for (int col = 0; col < width; col++) {
+			Color pxl = outImage->GetPixel(col, row);
+			if (abs(K1 - (int)pxl.R) >= abs(K2 - (int)pxl.R))
+				outImage->SetPixel(col, row, Color::FromArgb(255, 255, 255));
+			else
+				outImage->SetPixel(col, row, Color::FromArgb(0, 0, 0));
+		}
+
+	return outImage;
 }

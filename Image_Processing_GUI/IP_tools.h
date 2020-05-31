@@ -12,7 +12,7 @@ double thresholdSelectionWithOtsu(int threshold, double* histogram, int width, i
 double* resetHistoram(double* histogram);
 
 Bitmap^ toBinaryImage(Bitmap^ binarySurface, Bitmap^ grayscaleImage, int thresholdValue);
-
+Bitmap^ K_MeansClustring(Bitmap^ grayscaleImage, double* histogram, int width, int height);
 
 //double CalculateMean(double* histogram);
 double CalculateMean(double* histogram, int start = 0, int finish = MAX_INTENSITY);

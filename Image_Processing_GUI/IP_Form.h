@@ -84,6 +84,7 @@ namespace ImageProcessingGUI {
 	private: System::Windows::Forms::ComboBox^ comboBox3;
 	private: System::Windows::Forms::Label^ label7;
 	private: System::Windows::Forms::ToolStripMenuItem^ binaryImageWýtToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ kmeansClusteringToolStripMenuItem;
 	public:
 
 	private:
@@ -110,6 +111,7 @@ namespace ImageProcessingGUI {
 			this->conversionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->grayscaleImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->binaryImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->binaryImageWýtToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->processToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->extractHistogramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->originalÝmageHistogramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -135,7 +137,7 @@ namespace ImageProcessingGUI {
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
 			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->binaryImageWýtToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->kmeansClusteringToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
@@ -195,9 +197,9 @@ namespace ImageProcessingGUI {
 			// 
 			// conversionToolStripMenuItem
 			// 
-			this->conversionToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->conversionToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
 				this->grayscaleImageToolStripMenuItem,
-					this->binaryImageToolStripMenuItem, this->binaryImageWýtToolStripMenuItem
+					this->binaryImageToolStripMenuItem, this->binaryImageWýtToolStripMenuItem, this->kmeansClusteringToolStripMenuItem
 			});
 			this->conversionToolStripMenuItem->Name = L"conversionToolStripMenuItem";
 			this->conversionToolStripMenuItem->Size = System::Drawing::Size(96, 24);
@@ -219,6 +221,13 @@ namespace ImageProcessingGUI {
 			this->binaryImageToolStripMenuItem->ToolTipText = L"Convert to binary image from grayscale image";
 			this->binaryImageToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::binaryImageToolStripMenuItem_Click);
 			// 
+			// binaryImageWýtToolStripMenuItem
+			// 
+			this->binaryImageWýtToolStripMenuItem->Name = L"binaryImageWýtToolStripMenuItem";
+			this->binaryImageWýtToolStripMenuItem->Size = System::Drawing::Size(245, 26);
+			this->binaryImageWýtToolStripMenuItem->Text = L"Binary Image with Otsu";
+			this->binaryImageWýtToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::binaryImageWýtToolStripMenuItem_Click);
+			// 
 			// processToolStripMenuItem
 			// 
 			this->processToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
@@ -236,7 +245,7 @@ namespace ImageProcessingGUI {
 					this->grayscaleÝmageHistogramToolStripMenuItem, this->binaryÝmageHistogramToolStripMenuItem
 			});
 			this->extractHistogramToolStripMenuItem->Name = L"extractHistogramToolStripMenuItem";
-			this->extractHistogramToolStripMenuItem->Size = System::Drawing::Size(208, 26);
+			this->extractHistogramToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->extractHistogramToolStripMenuItem->Text = L"Extract histogram";
 			// 
 			// originalÝmageHistogramToolStripMenuItem
@@ -263,7 +272,7 @@ namespace ImageProcessingGUI {
 			// smootingToolStripMenuItem
 			// 
 			this->smootingToolStripMenuItem->Name = L"smootingToolStripMenuItem";
-			this->smootingToolStripMenuItem->Size = System::Drawing::Size(208, 26);
+			this->smootingToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->smootingToolStripMenuItem->Text = L"Smoothing";
 			this->smootingToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::smootingToolStripMenuItem_Click);
 			// 
@@ -474,12 +483,12 @@ namespace ImageProcessingGUI {
 			this->label7->Text = L"Filtreleme Türü : ";
 			this->label7->Visible = false;
 			// 
-			// binaryImageWýtToolStripMenuItem
+			// kmeansClusteringToolStripMenuItem
 			// 
-			this->binaryImageWýtToolStripMenuItem->Name = L"binaryImageWýtToolStripMenuItem";
-			this->binaryImageWýtToolStripMenuItem->Size = System::Drawing::Size(245, 26);
-			this->binaryImageWýtToolStripMenuItem->Text = L"Binary Image with Otsu";
-			this->binaryImageWýtToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::binaryImageWýtToolStripMenuItem_Click);
+			this->kmeansClusteringToolStripMenuItem->Name = L"kmeansClusteringToolStripMenuItem";
+			this->kmeansClusteringToolStripMenuItem->Size = System::Drawing::Size(245, 26);
+			this->kmeansClusteringToolStripMenuItem->Text = L"K-means Clustering";
+			this->kmeansClusteringToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::kmeansClusteringToolStripMenuItem_Click);
 			// 
 			// IP_Form
 			// 
@@ -819,9 +828,24 @@ namespace ImageProcessingGUI {
 
 			this->trackBar1->Visible = TRUE;
 			label3->Visible = TRUE;
-			this->comboBox1->Items->Add("binaryImage");
-			richTextBox1->AppendText("\nConverted to binary image with thereshold value : " + optimalThreshold);
+			this->comboBox1->Items->Add("binaryImage with Otsu");
+			richTextBox1->AppendText("\nConverted to binary image with Otsu thereshold value : " + optimalThreshold);
 
 		}//OTSU ALGORITHM
+
+		//K-MEANS CLUSTERING
+		private: System::Void kmeansClusteringToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+
+			double* histogram = extractHistogram(grayscaleImage, Width, Height);
+
+			Bitmap^ binaryImage =  K_MeansClustring(grayscaleImage, histogram, Width, Height);
+
+			pictureBox3->Image = binaryImage;
+			label3->Visible = TRUE;
+			this->comboBox1->Items->Add("K-means clustering");
+			richTextBox1->AppendText("\nConverted to binary image with K-means clustering");
+
+
+		}//K-MEANS CLUSTERING
 };
 }
