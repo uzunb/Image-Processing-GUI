@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <string.h>
 #include <thread>
+#include <ctime>
+
 using namespace System::Drawing;
 
 //3 renk için ayrý mý yapýlacak.
@@ -340,12 +342,13 @@ double thresholdSelectionWithOtsu(int threshold, double* histogram, int width, i
 }
 
 
-Bitmap^ K_MeansClustring(Bitmap^ grayscaleImage, double *histogram, int width, int height)
+Bitmap^ K_MeansClustering(Bitmap^ grayscaleImage ,double *histogram, int width, int height)
 {
-	Bitmap^ outImage = grayscaleImage;
+	Bitmap^ outImage = gcnew Bitmap(width, height);
 
-	int K1_Class[MAX_INTENSITY] = {}, K1 = histogram[85], _K1, K1_index = 0, K1_totalWeight = 0, K1_totalHist = 0; //Black : 0
-	int K2_Class[MAX_INTENSITY] = {}, K2 = histogram[170], _K2, K2_index = 0, K2_totalWeight = 0, K2_totalHist = 0; //White : 255
+	int K1_Class[MAX_INTENSITY] = {}, K1 = histogram[85], _K1, K1_index = 0, K1_totalWeight = 0, K1_totalHist = 0;	//Black : 255
+	int K2_Class[MAX_INTENSITY] = {}, K2 = histogram[170], _K2, K2_index = 0, K2_totalWeight = 0, K2_totalHist = 0; //White : 0
+
 
 	while ((K1 != _K1) & (K2 != _K2))
 	{
@@ -373,12 +376,316 @@ Bitmap^ K_MeansClustring(Bitmap^ grayscaleImage, double *histogram, int width, i
 
 	for (int row = 0; row < height; row++)
 		for (int col = 0; col < width; col++) {
-			Color pxl = outImage->GetPixel(col, row);
+			Color pxl = grayscaleImage->GetPixel(col, row);
 			if (abs(K1 - (int)pxl.R) >= abs(K2 - (int)pxl.R))
-				outImage->SetPixel(col, row, Color::FromArgb(255, 255, 255));
-			else
 				outImage->SetPixel(col, row, Color::FromArgb(0, 0, 0));
+			else
+				outImage->SetPixel(col, row, Color::FromArgb(255, 255, 255));
 		}
 
 	return outImage;
+}
+
+Bitmap^ K_MeansClustering(double* histogram, int width, int height, int classNumber)
+{
+	Bitmap^ outImage = gcnew Bitmap(width, height);
+
+	int** class_K = new int* [classNumber];
+	int* K = new int[classNumber];
+	int* _K = new int[classNumber];
+	int* index_K = new int[classNumber]();
+	int* totalWeight_K = new int[classNumber]();
+	int* totalHist_K = new int[classNumber]();
+
+	for (int var = 0; var < classNumber; var++) {
+		class_K[var] = new int[MAX_INTENSITY];
+		K[var] = histogram[(var * MAX_INTENSITY) / classNumber];
+	}
+
+	while (isEqualK(K, _K, classNumber))
+	{
+		for (int index = 0; index < MAX_INTENSITY; index++)
+		{
+			//Euclidean ya da mahalonobis uzaklýk bul. Tek ifde tammalanýr.
+
+			/*if (abs(K1 - histogram[index]) >= abs(K2 - histogram[index]))
+			{
+				K1_Class[index] = histogram[index];
+				K1_totalWeight += histogram[index] * index;
+				K1_totalHist += histogram[index];
+			}
+			else
+			{
+				K2_Class[index] = histogram[index];
+				K2_totalWeight += histogram[index] * index;
+				K2_totalHist += histogram[index];
+			}*/
+		}
+
+		for (int i = 0; i < classNumber; i++){
+			_K[classNumber] = totalWeight_K[classNumber] / totalHist_K[classNumber];
+			K[classNumber] = _K[classNumber];
+		}
+	}
+
+	for (int row = 0; row < height; row++)
+		for (int col = 0; col < width; col++) {
+			Color pxl = outImage->GetPixel(col, row);
+			//Euclidean, Mahalonobis uzaklýk hesapla
+			/*if (abs(K1 - (int)pxl.R) >= abs(K2 - (int)pxl.R))
+				outImage->SetPixel(col, row, Color::FromArgb(0, 0, 0));
+			else
+				outImage->SetPixel(col, row, Color::FromArgb(255, 255, 255));*/
+		}
+
+	return outImage;
+
+
+
+
+
+}
+
+bool isEqualK(int* k, int* _k, int classNumber)
+{
+	for (int i = 0; i < classNumber; i++)
+		if (k[classNumber] == _k[classNumber])
+			return false;
+	return true;
+}
+
+//Bitmap^ connectivityLabeling(Bitmap^ bI, int width, int height)
+//{
+//	Bitmap^ labIm = gcnew Bitmap(width, height);
+//	labIm = bI;
+//	int labelCount = 0, CollisionCount = 0, labelColor;
+//	int equavalencyList[1000] = {};
+//
+//	Color A, B, C, D;
+//	for (int row = 1; row < height; row++)
+//		for (int col = 1; col < width; col++)
+//		{
+//
+//			A = labIm->GetPixel(col, row);
+//			B = labIm->GetPixel(col - 1, row);
+//			C = labIm->GetPixel(col, row - 1);
+//			D = labIm->GetPixel(col - 1, row - 1);
+//			
+//			//is Background?
+//			if (A == Color::FromArgb(0, 0, 0))
+//				continue;
+//
+//			else if (D.R == A.R)
+//				labIm->SetPixel(col, row, A);
+//
+//			else if (B.R == 0 && C.R == 0)
+//				labIm->SetPixel(col, row, Color::FromArgb(++labelCount, labelCount, labelCount));
+//
+//			else if (B.R != 0 && C.R == 0)
+//				labIm->SetPixel(col, row, B);
+//
+//			else if (B.R == 0 && C.R != 0)
+//				labIm->SetPixel(col, row, C);
+//
+//			else if (B.R == C.R)
+//				labIm->SetPixel(col, row, C);
+//
+//			//Collision Case
+//			else if (B.R != 0 && C.R != 0) {
+//				if (B.R <= C.R) {
+//					labIm->SetPixel(col, row, B);
+//					if (!isAgainCollision(equavalencyList, 1000, C.R, B.R)) {
+//						equavalencyList[CollisionCount] = C.R;
+//						equavalencyList[CollisionCount + 1] = B.R;
+//						CollisionCount += 2;
+//					}
+//				}
+//				else {
+//					labIm->SetPixel(col, row, C);
+//					if (!isAgainCollision(equavalencyList, 1000, B.R, C.R)) {
+//						equavalencyList[CollisionCount] = B.R;
+//						equavalencyList[CollisionCount + 1] = C.R;
+//						CollisionCount += 2;
+//					}
+//				}
+//				
+//			}
+//		}
+//
+//	for (int row = 1; row < height; row++)
+//		for (int col = 1; col < width; col++)
+//		{
+//			A = labIm->GetPixel(col, row);
+//			if (A.R == 0)
+//				continue;
+//			//Collision Elimination
+//			for (int i = 0; i <= CollisionCount; i += 2)
+//				if (A.R == equavalencyList[i]) {
+//					labIm->SetPixel(col, row, Color::FromArgb(equavalencyList[i + 1], equavalencyList[i + 1], equavalencyList[i + 1]));
+//					break;
+//				}
+//
+//			labelColor = A.R * 255 / labelCount;
+//			labIm->SetPixel(col, row, Color::FromArgb(labelColor, 0, 0));
+//		}
+//
+//	return labIm;
+//}
+
+Bitmap^ connectivityLabeling(Bitmap^ bI, int width, int height)
+{
+	Bitmap^ labIm = gcnew Bitmap(bI, width, height);
+	int labelCount = 1;
+
+	Color A, B, C, D, E;
+	for (int row = 1; row < height; row++)
+		for (int col = 1; col < width - 1; col++)
+		{
+			A = labIm->GetPixel(col, row);
+			B = labIm->GetPixel(col - 1, row);
+			C = labIm->GetPixel(col, row - 1);
+			//D = labIm->GetPixel(col - 1, row - 1);
+			//E = labIm->GetPixel(col + 1, row - 1);
+
+			//is Background?
+			if (A == Color::FromArgb(0, 0, 0))
+				continue;
+
+			/*else if (D.R == A.R)
+				labIm->SetPixel(col, row, D);*/
+
+			else if (B.R == 0 && C.R == 0) {
+				labIm->SetPixel(col, row, Color::FromArgb(rand() % 255, rand() % 255, rand() % 255));
+				labelCount++;
+			}
+
+			else if (B.R == 0 && C.R != 0)
+				labIm->SetPixel(col, row, C);
+
+			else if (B.R != 0 && C.R == 0)
+				labIm->SetPixel(col, row, B);
+
+			else if (B.R != 0 && C.R != 0) {
+				if (B != C) {
+					if (C.R <= B.R) {
+						update(labIm, row, col, C, B);
+						labIm->SetPixel(col, row, C);
+					}
+					else {
+						update(labIm, row, col, B, C);
+						labIm->SetPixel(col, row, B);
+					}
+					labelCount--;
+				}
+				else
+					labIm->SetPixel(col, row, B);
+			}
+		}
+
+	return labIm;
+}
+
+void update(Bitmap^ labIm, int row, int col, Color B, Color C)
+{
+	for (int i = 1; i <= row; i++)
+		for (int j = 1; j <= col; j++)
+			if (labIm->GetPixel(j, i) == C)
+				labIm->SetPixel(j, i, B);
+}
+
+//void addLabelPxl(int* locationPxl, int *pxlNumber, int row, int col)
+//{
+//	locationPxl[*pxlNumber] = row;
+//	locationPxl[*pxlNumber] = col;
+//	*pxlNumber += 2;
+//}
+
+
+
+
+//int* generateLabelColor(int labelCount)
+//{
+//	srand((int)time(0));
+//	int* labels = new int[labelCount*3];
+//
+//	for (int i = 0; i < labelCount; i += 3) {
+//		labels[i] = rand() % 255;
+//		labels[i + 1] = rand() % 255;
+//		labels[i + 2] = rand() % 255;
+//	}
+//	return labels;
+//}
+bool isAgainCollision(int arr[], int arrSize, int first, int second)
+{
+	for (int i = 0; i < arrSize; i += 2)
+		if (arr[i] == first && arr[i+1] == second)
+			return true;
+	return false;
+}
+
+Bitmap^ dilationBinaryImage(Bitmap^ binaryImage, int width, int height)
+{
+	/*int structeringElement[11][11] =	{	{0,0,0,0,0,1,0,0,0,0,0},
+											{0,0,0,0,1,1,1,0,0,0,0} ,
+											{0,0,0,1,1,1,1,1,0,0,0} ,
+											{0,0,1,1,1,1,1,1,1,0,0} ,
+											{0,1,1,1,1,1,1,1,1,1,0} ,
+											{1,1,1,1,1,1,1,1,1,1,1} ,
+											{0,1,1,1,1,1,1,1,1,1,0} ,
+											{0,0,1,1,1,1,1,1,1,0,0} ,
+											{0,0,0,1,1,1,1,1,0,0,0} , 
+											{0,0,0,0,1,1,1,0,0,0,0} , 
+											{0,0,0,0,0,1,0,0,0,0,0} };*/
+
+	int structeringElement[3][3] = {
+		{255, 255, 255},
+		{255, 255, 255},
+		{255, 255, 255}
+	};
+
+	Bitmap^ outputImage = gcnew Bitmap(width, height);
+	int elementSize = 3, newPxl;
+
+	for (int col= (elementSize-1) / 2; col < width - (elementSize -1) / 2; col++)
+		for (int row = (elementSize - 1) / 2; row < height - (elementSize - 1) / 2; row++)
+		{
+			if (binaryImage->GetPixel(col, row) == Color::FromArgb(0, 0, 0))
+				outputImage->SetPixel(col, row , Color::FromArgb(0, 0, 0));
+
+			else
+				for (int i = -((elementSize - 1) / 2); i <= (elementSize - 1) / 2; i++) 
+					for (int j = -((elementSize - 1) / 2); j <= (elementSize - 1) / 2; j++)
+					{
+						newPxl = binaryImage->GetPixel(col + i, row + j).R | structeringElement[i + 1][j + 1];
+						outputImage->SetPixel(col + i, row + j, Color::FromArgb(newPxl, newPxl, newPxl));
+					}
+		}
+	return outputImage;
+}
+
+Bitmap^ erosionBinaryImage(Bitmap^ binaryImage, int width, int height)
+{
+	int structeringElement[3][3] = { {0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0} };
+	int elementSize = 3, newPxl;
+	Bitmap^ outputImage = gcnew Bitmap(width, height);
+
+	for (int col = (elementSize - 1) / 2; col < width - (elementSize - 1) / 2; col++)
+		for (int row = (elementSize - 1) / 2; row < height - (elementSize - 1) / 2; row++)
+		{
+			if (binaryImage->GetPixel(col, row) == Color::FromArgb(0, 0, 0))
+				for (int i = -((elementSize - 1) / 2); i <= (elementSize - 1) / 2; i++)
+					for (int j = -((elementSize - 1) / 2); j <= (elementSize - 1) / 2; j++)
+					{
+						newPxl =  structeringElement[i +1 ][j + 1];
+						outputImage->SetPixel(col + i, row + j, Color::FromArgb(newPxl, newPxl, newPxl));
+					}
+				
+
+			else
+				outputImage->SetPixel(col, row, Color::FromArgb(255, 255, 255)); 
+		}
+
+	return outputImage;
 }

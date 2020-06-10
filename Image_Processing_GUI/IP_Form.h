@@ -14,7 +14,6 @@
 
 #include "ReadBMP.h"
 #include "IP_tools.h"
-#include "SmoothingForm.h"
 
 namespace ImageProcessingGUI {
 
@@ -67,7 +66,7 @@ namespace ImageProcessingGUI {
 	private: System::Windows::Forms::ToolStripMenuItem^ grayscaleÝmageHistogramToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ binaryÝmageHistogramToolStripMenuItem;
 	private: System::Windows::Forms::TrackBar^ trackBar1;
-	private: System::Windows::Forms::ToolStripMenuItem^ smootingToolStripMenuItem;
+
 
 
 
@@ -85,6 +84,15 @@ namespace ImageProcessingGUI {
 	private: System::Windows::Forms::Label^ label7;
 	private: System::Windows::Forms::ToolStripMenuItem^ binaryImageWýtToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ kmeansClusteringToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ smootingToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ connectivityAndLabelingToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ morphologyToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ dilationToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ erosionToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator2;
+	private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator1;
+	private: System::Windows::Forms::ToolStripSeparator^ toolStripSeparator3;
+	private: System::Windows::Forms::ToolStripMenuItem^ saveLastImageToolStripMenuItem;
 	public:
 
 	private:
@@ -100,24 +108,33 @@ namespace ImageProcessingGUI {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(IP_Form::typeid));
 			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
 			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
 			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->toolStripSeparator2 = (gcnew System::Windows::Forms::ToolStripSeparator());
 			this->closeImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->conversionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->grayscaleImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->toolStripSeparator1 = (gcnew System::Windows::Forms::ToolStripSeparator());
 			this->binaryImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->binaryImageWýtToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->kmeansClusteringToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->processToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->extractHistogramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->originalÝmageHistogramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->grayscaleÝmageHistogramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->binaryÝmageHistogramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->toolStripSeparator3 = (gcnew System::Windows::Forms::ToolStripSeparator());
+			this->connectivityAndLabelingToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->smootingToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->morphologyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->dilationToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->erosionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
@@ -137,7 +154,7 @@ namespace ImageProcessingGUI {
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
 			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->kmeansClusteringToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveLastImageToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
@@ -151,9 +168,9 @@ namespace ImageProcessingGUI {
 			// 
 			this->menuStrip1->BackColor = System::Drawing::Color::DimGray;
 			this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {
 				this->fileToolStripMenuItem,
-					this->conversionToolStripMenuItem, this->processToolStripMenuItem
+					this->conversionToolStripMenuItem, this->processToolStripMenuItem, this->smootingToolStripMenuItem, this->morphologyToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -163,9 +180,9 @@ namespace ImageProcessingGUI {
 			// 
 			// fileToolStripMenuItem
 			// 
-			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {
 				this->openImageToolStripMenuItem,
-					this->closeImageToolStripMenuItem, this->exitToolStripMenuItem
+					this->toolStripSeparator2, this->saveLastImageToolStripMenuItem, this->closeImageToolStripMenuItem, this->exitToolStripMenuItem
 			});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(46, 24);
@@ -174,15 +191,20 @@ namespace ImageProcessingGUI {
 			// openImageToolStripMenuItem
 			// 
 			this->openImageToolStripMenuItem->Name = L"openImageToolStripMenuItem";
-			this->openImageToolStripMenuItem->Size = System::Drawing::Size(174, 26);
+			this->openImageToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->openImageToolStripMenuItem->Text = L"Open Image";
 			this->openImageToolStripMenuItem->ToolTipText = L"Open BMP image";
 			this->openImageToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::openImageToolStripMenuItem_Click);
 			// 
+			// toolStripSeparator2
+			// 
+			this->toolStripSeparator2->Name = L"toolStripSeparator2";
+			this->toolStripSeparator2->Size = System::Drawing::Size(221, 6);
+			// 
 			// closeImageToolStripMenuItem
 			// 
 			this->closeImageToolStripMenuItem->Name = L"closeImageToolStripMenuItem";
-			this->closeImageToolStripMenuItem->Size = System::Drawing::Size(174, 26);
+			this->closeImageToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->closeImageToolStripMenuItem->Text = L"Close Image";
 			this->closeImageToolStripMenuItem->ToolTipText = L"Clean to buffers";
 			this->closeImageToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::closeImageToolStripMenuItem_Click);
@@ -190,16 +212,16 @@ namespace ImageProcessingGUI {
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(174, 26);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->ToolTipText = L"Clear to buffers and exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::exitToolStripMenuItem_Click);
 			// 
 			// conversionToolStripMenuItem
 			// 
-			this->conversionToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
+			this->conversionToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {
 				this->grayscaleImageToolStripMenuItem,
-					this->binaryImageToolStripMenuItem, this->binaryImageWýtToolStripMenuItem, this->kmeansClusteringToolStripMenuItem
+					this->toolStripSeparator1, this->binaryImageToolStripMenuItem, this->binaryImageWýtToolStripMenuItem, this->kmeansClusteringToolStripMenuItem
 			});
 			this->conversionToolStripMenuItem->Name = L"conversionToolStripMenuItem";
 			this->conversionToolStripMenuItem->Size = System::Drawing::Size(96, 24);
@@ -212,6 +234,11 @@ namespace ImageProcessingGUI {
 			this->grayscaleImageToolStripMenuItem->Text = L"Grayscale Image";
 			this->grayscaleImageToolStripMenuItem->ToolTipText = L"Convert to grayscale from original i";
 			this->grayscaleImageToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::grayscaleImageToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator1
+			// 
+			this->toolStripSeparator1->Name = L"toolStripSeparator1";
+			this->toolStripSeparator1->Size = System::Drawing::Size(242, 6);
 			// 
 			// binaryImageToolStripMenuItem
 			// 
@@ -228,11 +255,18 @@ namespace ImageProcessingGUI {
 			this->binaryImageWýtToolStripMenuItem->Text = L"Binary Image with Otsu";
 			this->binaryImageWýtToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::binaryImageWýtToolStripMenuItem_Click);
 			// 
+			// kmeansClusteringToolStripMenuItem
+			// 
+			this->kmeansClusteringToolStripMenuItem->Name = L"kmeansClusteringToolStripMenuItem";
+			this->kmeansClusteringToolStripMenuItem->Size = System::Drawing::Size(245, 26);
+			this->kmeansClusteringToolStripMenuItem->Text = L"K-means Clustering";
+			this->kmeansClusteringToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::kmeansClusteringToolStripMenuItem_Click);
+			// 
 			// processToolStripMenuItem
 			// 
-			this->processToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->processToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->extractHistogramToolStripMenuItem,
-					this->smootingToolStripMenuItem
+					this->toolStripSeparator3, this->connectivityAndLabelingToolStripMenuItem
 			});
 			this->processToolStripMenuItem->Name = L"processToolStripMenuItem";
 			this->processToolStripMenuItem->Size = System::Drawing::Size(72, 24);
@@ -245,7 +279,7 @@ namespace ImageProcessingGUI {
 					this->grayscaleÝmageHistogramToolStripMenuItem, this->binaryÝmageHistogramToolStripMenuItem
 			});
 			this->extractHistogramToolStripMenuItem->Name = L"extractHistogramToolStripMenuItem";
-			this->extractHistogramToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->extractHistogramToolStripMenuItem->Size = System::Drawing::Size(254, 26);
 			this->extractHistogramToolStripMenuItem->Text = L"Extract histogram";
 			// 
 			// originalÝmageHistogramToolStripMenuItem
@@ -269,12 +303,51 @@ namespace ImageProcessingGUI {
 			this->binaryÝmageHistogramToolStripMenuItem->Text = L"Binary image histogram";
 			this->binaryÝmageHistogramToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::binaryImageHistogramToolStripMenuItem_Click);
 			// 
+			// toolStripSeparator3
+			// 
+			this->toolStripSeparator3->Name = L"toolStripSeparator3";
+			this->toolStripSeparator3->Size = System::Drawing::Size(251, 6);
+			// 
+			// connectivityAndLabelingToolStripMenuItem
+			// 
+			this->connectivityAndLabelingToolStripMenuItem->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"connectivityAndLabelingToolStripMenuItem.Image")));
+			this->connectivityAndLabelingToolStripMenuItem->Name = L"connectivityAndLabelingToolStripMenuItem";
+			this->connectivityAndLabelingToolStripMenuItem->ShowShortcutKeys = false;
+			this->connectivityAndLabelingToolStripMenuItem->Size = System::Drawing::Size(254, 26);
+			this->connectivityAndLabelingToolStripMenuItem->Text = L"Connectivity and Labeling";
+			this->connectivityAndLabelingToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::connectivityAndLabelingToolStripMenuItem_Click);
+			// 
 			// smootingToolStripMenuItem
 			// 
+			this->smootingToolStripMenuItem->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"smootingToolStripMenuItem.Image")));
 			this->smootingToolStripMenuItem->Name = L"smootingToolStripMenuItem";
-			this->smootingToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->smootingToolStripMenuItem->Size = System::Drawing::Size(116, 24);
 			this->smootingToolStripMenuItem->Text = L"Smoothing";
-			this->smootingToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::smootingToolStripMenuItem_Click);
+			this->smootingToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::smootingToolStripMenuItem_Click_1);
+			// 
+			// morphologyToolStripMenuItem
+			// 
+			this->morphologyToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->dilationToolStripMenuItem,
+					this->erosionToolStripMenuItem
+			});
+			this->morphologyToolStripMenuItem->Name = L"morphologyToolStripMenuItem";
+			this->morphologyToolStripMenuItem->Size = System::Drawing::Size(105, 24);
+			this->morphologyToolStripMenuItem->Text = L"Morphology";
+			// 
+			// dilationToolStripMenuItem
+			// 
+			this->dilationToolStripMenuItem->Name = L"dilationToolStripMenuItem";
+			this->dilationToolStripMenuItem->Size = System::Drawing::Size(145, 26);
+			this->dilationToolStripMenuItem->Text = L"Dilation";
+			this->dilationToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::dilationToolStripMenuItem_Click);
+			// 
+			// erosionToolStripMenuItem
+			// 
+			this->erosionToolStripMenuItem->Name = L"erosionToolStripMenuItem";
+			this->erosionToolStripMenuItem->Size = System::Drawing::Size(145, 26);
+			this->erosionToolStripMenuItem->Text = L"Erosion";
+			this->erosionToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::erosionToolStripMenuItem_Click);
 			// 
 			// openFileDialog1
 			// 
@@ -483,12 +556,12 @@ namespace ImageProcessingGUI {
 			this->label7->Text = L"Filtreleme Türü : ";
 			this->label7->Visible = false;
 			// 
-			// kmeansClusteringToolStripMenuItem
+			// saveLastImageToolStripMenuItem
 			// 
-			this->kmeansClusteringToolStripMenuItem->Name = L"kmeansClusteringToolStripMenuItem";
-			this->kmeansClusteringToolStripMenuItem->Size = System::Drawing::Size(245, 26);
-			this->kmeansClusteringToolStripMenuItem->Text = L"K-means Clustering";
-			this->kmeansClusteringToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::kmeansClusteringToolStripMenuItem_Click);
+			this->saveLastImageToolStripMenuItem->Name = L"saveLastImageToolStripMenuItem";
+			this->saveLastImageToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->saveLastImageToolStripMenuItem->Text = L"Save Last Image";
+			this->saveLastImageToolStripMenuItem->Click += gcnew System::EventHandler(this, &IP_Form::saveLastImageToolStripMenuItem_Click);
 			// 
 			// IP_Form
 			// 
@@ -551,7 +624,7 @@ namespace ImageProcessingGUI {
 			BYTE *imageBuffer, *grayscaleImageBuffer;
 			int Height, Width;
 			long size;
-			Bitmap^ grayscaleImage, ^binaryImage, ^smoothImage;
+			Bitmap^ grayscaleImage, ^binaryImage, ^smoothImage, ^lastImage;
 
 			
 
@@ -618,6 +691,8 @@ namespace ImageProcessingGUI {
 			delete[] imageBuffer;
 			delete[] grayscaleImageBuffer;
 			delete[] grayscaleImage;
+			delete[] binaryImage;
+			delete[] smoothImage;
 			this->comboBox1->Items->Clear();
 			chart1->Series->Clear();
 		}//CLOSE IMAGE
@@ -790,19 +865,7 @@ namespace ImageProcessingGUI {
 		}//EXECUTE SMOOTHING
 
 		
-		//SMOOTHING SETTINGS
-		private: System::Void smootingToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-			this->pictureBox4->Visible = FALSE;
-			this->label4->Visible = FALSE;
-
-			this->label5->Visible = TRUE;
-			this->label6->Visible = TRUE;
-			this->label7->Visible = TRUE;
-			this->comboBox1->Visible = TRUE;
-			this->comboBox2->Visible = TRUE;
-			this->comboBox3->Visible = TRUE;
-			this->button1->Visible = TRUE;
-		}//SMOOTHING SETTINGS
+		
 
 		//OTSU ALGORITHM
 		private: System::Void binaryImageWýtToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -838,7 +901,7 @@ namespace ImageProcessingGUI {
 
 			double* histogram = extractHistogram(grayscaleImage, Width, Height);
 
-			Bitmap^ binaryImage =  K_MeansClustring(grayscaleImage, histogram, Width, Height);
+			Bitmap^ binaryImage =  K_MeansClustering(grayscaleImage, histogram, Width, Height);
 
 			pictureBox3->Image = binaryImage;
 			label3->Visible = TRUE;
@@ -847,5 +910,68 @@ namespace ImageProcessingGUI {
 
 
 		}//K-MEANS CLUSTERING
+
+		//SMOOTHING SETTINGS
+		private: System::Void smootingToolStripMenuItem_Click_1(System::Object^ sender, System::EventArgs^ e) {
+			if (smootingToolStripMenuItem->Checked == FALSE) {
+				this->pictureBox4->Visible = FALSE;
+				this->label4->Visible = FALSE;
+
+				this->label5->Visible = TRUE;
+				this->label6->Visible = TRUE;
+				this->label7->Visible = TRUE;
+				this->comboBox1->Visible = TRUE;
+				this->comboBox2->Visible = TRUE;
+				this->comboBox3->Visible = TRUE;
+				this->button1->Visible = TRUE;
+			}
+			else {
+				this->pictureBox4->Visible = TRUE;
+				this->label4->Visible = TRUE;
+
+				this->label5->Visible = FALSE;
+				this->label6->Visible = FALSE;
+				this->label7->Visible = FALSE;
+				this->comboBox1->Visible = FALSE;
+				this->comboBox2->Visible = FALSE;
+				this->comboBox3->Visible = FALSE;
+				this->button1->Visible = FALSE;
+			}
+		}//SMOOTHING SETTINGS
+
+		//CONNECTIVITY AND LABELING
+		private: System::Void connectivityAndLabelingToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+
+			Bitmap^ labelImage = connectivityLabeling(binaryImage, Width, Height);
+			pictureBox4->Image = labelImage;
+			pictureBox4->Visible = TRUE;
+			lastImage = labelImage;
+
+		}//CONNECTIVITY AND LABELING
+
+		//DILATION
+		private: System::Void dilationToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+
+			Bitmap^ dilatedImage = dilationBinaryImage(binaryImage, Width, Height);
+			binaryImage = dilatedImage;
+			pictureBox3->Image = dilatedImage;
+			label3->Text = "Dilated Image";
+
+		}//DILATION
+
+		//EROSION
+		private: System::Void erosionToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+			Bitmap^ erosedImage = erosionBinaryImage(binaryImage, Width, Height);
+			binaryImage = erosedImage;
+			pictureBox3->Image = erosedImage;
+			label3->Text = "Erosed Image";
+
+		}//EROSION
+
+		//SAVE LAST IMAGE
+		private: System::Void saveLastImageToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+			//Bitamp kaydet ya da BYTE.
+
+		}//SAVE LAST IMAGE
 };
 }

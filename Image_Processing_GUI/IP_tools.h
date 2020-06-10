@@ -12,7 +12,9 @@ double thresholdSelectionWithOtsu(int threshold, double* histogram, int width, i
 double* resetHistoram(double* histogram);
 
 Bitmap^ toBinaryImage(Bitmap^ binarySurface, Bitmap^ grayscaleImage, int thresholdValue);
-Bitmap^ K_MeansClustring(Bitmap^ grayscaleImage, double* histogram, int width, int height);
+Bitmap^ K_MeansClustering(Bitmap^ grayscaleImage, double* histogram, int width, int height);
+Bitmap^ K_MeansClustering(double* histogram, int width, int height, int classNumber);
+bool isEqualK(int* k, int* _k, int classNumber);
 
 //double CalculateMean(double* histogram);
 double CalculateMean(double* histogram, int start = 0, int finish = MAX_INTENSITY);
@@ -29,5 +31,11 @@ void findMedianG(int* pxl, const int elementSize, int const& outputValue);
 void findMedianB(int* pxl, const int elementSize, int const& outputValue);
 int* getGaussianMatrix(int templateSize);
 int getGaussianMatrixSum(int templateSize);
+
+Bitmap^ connectivityLabeling(Bitmap^ binaryImage, int width, int height);
+void update(Bitmap^ labIm, int row, int col, Color B, Color C);
+bool isAgainCollision(int arr[], int arrSize, int first, int second);
+Bitmap^ dilationBinaryImage(Bitmap^ binaryImage, int width, int height);
+Bitmap^ erosionBinaryImage(Bitmap^ binaryImage, int width, int height);
 
 
